@@ -1,0 +1,36 @@
+stages:
+  - install
+  - build
+  - deploy
+
+# Cache dependencies to speed up the build process
+cache:
+  paths:
+    - node_modules/
+
+# Install dependencies
+install_dependencies:
+  stage: install
+  image: node:16 # Use a Node.js image (can use other versions as well)
+  script:
+    - npm install # Install all dependencies from package.json
+
+# Build the React app
+build_react_app:
+  stage: build
+  image: node:16
+  script:
+    - npm run build # Build the production version of your React app
+  artifacts:
+    paths:
+      - build/  # Store the build directory as an artifact for deployment
+
+# Deploy to Netlify
+deploy_to_netlify:
+  stage: deploy
+  image: node:16
+  script:
+    - npm install -g netlify-cli  # Install the Netlify CLI globally
+    - netlify deploy --prod --dir=build --site=$NETLIFY_SITE_ID --auth=$NETLIFY_AUTH_TOKEN  # Deploy the build folder to Netlify
+  only:
+    - main  # Deploy only from the 'main' branch
