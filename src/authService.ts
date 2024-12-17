@@ -1,10 +1,12 @@
 import axios from "./axiosInstance";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 // Define the login function
 export const loginUser = async (username : any, password : any) => {
   try {
     // Send a POST request with username and password to the login API
-    const response = await axios.post('http://localhost:8081/auth/login', {
+    const response = await axios.post(`${apiUrl}/auth/login`, {
       username,
       password,
     });
